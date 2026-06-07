@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic DISC — FormaSo MSM2</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --vert:#2F4F3E; --vert-mid:#4a7a5e; --olive:#6B7A2E;
+  --orange:#D96A2B; --jaune:#E8B73A; --brun:#6A4B3A;
+  --beige:#FAF7F2; --beige2:#F2E7D5; --gris:#8A8176; --texte:#2B2B2B;
+  --D:#E74C3C; --I:#F39C12; --S:#27AE60; --C:#2980B9;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--beige);color:var(--texte);min-height:100vh;}
+
+/* HEADER */
+header{background:linear-gradient(135deg,var(--vert),var(--vert-mid));padding:18px 32px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 20px rgba(47,79,62,.25);}
+.logo-text{color:var(--jaune);font-family:'Playfair Display',serif;font-size:22px;}
+.logo-sub{color:#c8ddd1;font-size:12px;margin-top:2px;}
+.badge-msm{background:var(--jaune);color:var(--vert);font-size:12px;font-weight:800;padding:4px 14px;border-radius:20px;}
+
+/* SCREENS */
+.screen{display:none;} .screen.active{display:block;}
+
+/* ── INTRO ── */
+.intro-wrap{max-width:700px;margin:48px auto;padding:0 24px;text-align:center;}
+.intro-wrap h1{font-family:'Playfair Display',serif;font-size:34px;color:var(--vert);margin-bottom:10px;}
+.intro-wrap .tagline{color:var(--gris);font-size:15px;line-height:1.7;margin-bottom:32px;}
+
+.disc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px;text-align:left;}
+.disc-card{background:#fff;border-radius:14px;padding:16px 18px;box-shadow:0 2px 12px rgba(0,0,0,.07);border-left:4px solid var(--vert);}
+.disc-card h3{font-size:15px;font-weight:800;color:var(--vert);margin-bottom:4px;}
+.disc-card p{font-size:13px;color:var(--gris);line-height:1.5;}
+
+.info-box{background:#fff;border-left:4px solid var(--orange);border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:28px;text-align:left;font-size:14px;line-height:1.6;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.info-box strong{color:var(--vert);}
+
+.btn-start{background:linear-gradient(135deg,var(--vert),var(--vert-mid));color:#fff;border:none;padding:15px 48px;border-radius:50px;font-size:17px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;box-shadow:0 6px 24px rgba(47,79,62,.35);transition:all .2s;}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(47,79,62,.4);}
+
+/* ── PROGRESS ── */
+.progress-wrap{max-width:700px;margin:0 auto;padding:24px 24px 0;}
+.progress-top{display:flex;justify-content:space-between;margin-bottom:8px;}
+.progress-label{font-size:13px;color:var(--gris);font-weight:700;}
+.progress-count{font-size:13px;color:var(--vert);font-weight:800;}
+.progress-bar-bg{background:#DDE8E0;border-radius:8px;height:8px;overflow:hidden;}
+.progress-bar{background:linear-gradient(90deg,var(--vert),var(--jaune));height:8px;border-radius:8px;transition:width .5s ease;}
+
+/* ── QUESTION ── */
+.q-wrap{max-width:700px;margin:28px auto;padding:0 24px;}
+.q-card{background:#fff;border-radius:20px;padding:36px 40px;box-shadow:0 4px 32px rgba(47,79,62,.1);animation:slideIn .3s ease;}
+.q-num{font-size:12px;font-weight:800;color:var(--olive);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}
+.q-text{font-size:19px;font-weight:700;color:var(--vert);line-height:1.4;margin-bottom:10px;}
+.q-instr{font-size:13px;color:var(--gris);margin-bottom:20px;}
+
+/* Boutons NEUTRES — aucune couleur DISC */
+.choices{display:flex;flex-direction:column;gap:10px;}
+.choice-btn{
+  display:flex;align-items:center;gap:0;
+  padding:14px 20px;border-radius:12px;
+  border:2px solid #E0DAD2;background:#FAFAF8;
+  cursor:pointer;transition:all .18s;
+  font-family:'Nunito',sans-serif;font-size:15px;font-weight:600;
+  color:var(--texte);text-align:left;width:100%;
+}
+.choice-btn:hover{border-color:var(--vert-mid);background:#EEF4F0;}
+.choice-btn.selected{border-color:var(--vert);background:#EAF2EC;color:var(--vert);}
+
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:28px;}
+.btn-prev{background:none;border:2px solid var(--beige2);color:var(--gris);padding:10px 24px;border-radius:50px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;}
+.btn-prev:hover{border-color:var(--gris);color:var(--texte);}
+.btn-next{background:linear-gradient(135deg,var(--vert),var(--vert-mid));color:#fff;border:none;padding:12px 32px;border-radius:50px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;opacity:.35;pointer-events:none;}
+.btn-next.ready{opacity:1;pointer-events:all;}
+.btn-next.ready:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(47,79,62,.3);}
+
+/* ── RÉSULTATS ── */
+.res-wrap{max-width:820px;margin:32px auto;padding:0 24px 60px;}
+
+.res-header{background:linear-gradient(135deg,var(--vert),var(--vert-mid));border-radius:20px;padding:36px 40px;color:#fff;margin-bottom:20px;text-align:center;}
+.res-header h2{font-family:'Playfair Display',serif;font-size:26px;margin-bottom:6px;}
+.profile-badge{display:inline-flex;gap:4px;background:rgba(255,255,255,.15);padding:8px 24px;border-radius:50px;font-size:26px;font-weight:900;letter-spacing:6px;margin:10px 0;}
+.res-archetype{font-size:15px;opacity:.85;margin-bottom:4px;}
+.res-subtitle{font-size:13px;opacity:.65;}
+
+/* Axes */
+.axes-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.axe-card{background:#fff;border-radius:14px;padding:16px 18px;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.axe-card h4{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--olive);margin-bottom:10px;}
+.axe-item{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;}
+.axe-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+/* Scores */
+.scores-section{background:#fff;border-radius:20px;padding:28px 32px;margin-bottom:20px;box-shadow:0 2px 16px rgba(0,0,0,.06);}
+.scores-section h3{font-family:'Playfair Display',serif;color:var(--vert);font-size:18px;margin-bottom:22px;}
+.score-row{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.score-lbl{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;flex-shrink:0;}
+.score-lbl.D{background:var(--D);} .score-lbl.I{background:var(--I);} .score-lbl.S{background:var(--S);} .score-lbl.C{background:var(--C);}
+.score-name{width:90px;font-size:13px;font-weight:700;flex-shrink:0;}
+.score-bar-bg{flex:1;background:#F0ECE5;border-radius:8px;height:14px;overflow:hidden;}
+.score-bar{height:14px;border-radius:8px;width:0;transition:width 1.2s ease;}
+.score-bar.D{background:var(--D);} .score-bar.I{background:var(--I);} .score-bar.S{background:var(--S);} .score-bar.C{background:var(--C);}
+.score-num{width:50px;font-size:13px;font-weight:800;text-align:right;flex-shrink:0;}
+.score-pct{font-size:12px;color:var(--gris);}
+
+/* Description profil */
+.style-section{background:#fff;border-radius:20px;padding:28px 32px;margin-bottom:20px;box-shadow:0 2px 16px rgba(0,0,0,.06);}
+.style-section h3{font-family:'Playfair Display',serif;color:var(--vert);font-size:18px;margin-bottom:14px;}
+.style-desc{font-size:15px;line-height:1.75;color:var(--texte);margin-bottom:16px;}
+.style-tags{display:flex;flex-wrap:wrap;gap:8px;}
+.style-tag{background:var(--beige2);color:var(--brun);font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;}
+
+/* 4 cartes */
+.cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+.info-card{background:#fff;border-radius:16px;padding:22px;box-shadow:0 2px 16px rgba(0,0,0,.06);}
+.info-card h4{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;}
+.info-card h4.f{color:var(--S);} .info-card h4.v{color:var(--D);} .info-card h4.m{color:var(--C);} .info-card h4.c{color:var(--I);}
+.info-card ul{list-style:none;padding:0;}
+.info-card ul li{font-size:13px;padding:5px 0;border-bottom:1px solid #F0ECE5;line-height:1.45;}
+.info-card ul li:last-child{border-bottom:none;}
+.info-card ul li::before{content:"→ ";font-weight:800;color:var(--vert-mid);}
+
+/* Tensions */
+.tensions-section{background:#fff;border-radius:20px;padding:28px 32px;margin-bottom:20px;box-shadow:0 2px 16px rgba(0,0,0,.06);}
+.tensions-section h3{font-family:'Playfair Display',serif;color:var(--vert);font-size:18px;margin-bottom:16px;}
+.tension-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.t-card{border-radius:12px;padding:14px 16px;font-size:13px;line-height:1.55;}
+.t-card.alert{background:#FEF3E2;border-left:3px solid var(--I);}
+.t-card.ok{background:#E8F8F0;border-left:3px solid var(--S);}
+.t-title{font-weight:800;margin-bottom:6px;font-size:13px;}
+
+/* Encadré pédagogique */
+.pedagogique{background:var(--beige2);border-left:4px solid var(--orange);border-radius:0 14px 14px 0;padding:20px 24px;margin-bottom:20px;}
+.pedagogique h3{font-size:14px;font-weight:800;color:var(--brun);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;}
+.pedagogique ul{list-style:none;padding:0;}
+.pedagogique ul li{font-size:13px;color:var(--texte);padding:4px 0;line-height:1.6;}
+.pedagogique ul li::before{content:"• ";color:var(--orange);font-weight:800;}
+
+/* Règle de platine */
+.platine{background:linear-gradient(135deg,var(--vert),var(--vert-mid));border-radius:14px;padding:20px 24px;margin-bottom:20px;text-align:center;color:#fff;}
+.platine h4{font-family:'Playfair Display',serif;font-size:16px;color:var(--jaune);margin-bottom:8px;}
+.platine p{font-size:14px;font-style:italic;opacity:.9;line-height:1.6;}
+
+/* CTA */
+.cta-row{display:flex;gap:12px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;}
+.btn-restart{background:linear-gradient(135deg,var(--vert),var(--vert-mid));color:#fff;border:none;padding:14px 36px;border-radius:50px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;box-shadow:0 4px 20px rgba(47,79,62,.3);transition:all .2s;}
+.btn-restart:hover{transform:translateY(-2px);}
+.btn-print{background:#fff;color:var(--vert);border:2px solid var(--vert);padding:14px 36px;border-radius:50px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;}
+.btn-print:hover{background:var(--vert);color:#fff;}
+
+footer{text-align:center;padding:18px;font-size:12px;color:var(--gris);border-top:1px solid #E8E3DC;}
+
+@keyframes slideIn{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:600px){
+  .disc-grid,.cards-grid,.tension-grid,.axes-row{grid-template-columns:1fr;}
+  .q-card{padding:22px 18px;}
+  .res-header{padding:24px 20px;}
+}
+@media print{header,footer,.btn-restart,.btn-print{display:none;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo-text">FormaSo</div>
+    <div class="logo-sub">Formation professionnelle · Qualiopi</div>
+  </div>
+  <div class="badge-msm">MSM2 — Leadership & Coaching</div>
+</header>
+
+<!-- ══════════════════════════════════
+     ÉCRAN 1 — INTRO
+══════════════════════════════════ -->
+<div id="screen-intro" class="screen active">
+<div class="intro-wrap">
+  <h1>Quel est votre profil DISC ?</h1>
+  <p class="tagline">Un outil de développement personnel issu des travaux du psychologue William Moulton Marston (1928).<br>Découvrez vos préférences comportementales en 20 questions.</p>
+
+  <div class="disc-grid">
+    <div class="disc-card"><h3>D — Dominance</h3><p>Orienté(e) action, résultats et décision. Rythme rapide, centré(e) sur les tâches.</p></div>
+    <div class="disc-card"><h3>I — Influence</h3><p>Orienté(e) relation, enthousiasme et persuasion. Rythme rapide, centré(e) sur les personnes.</p></div>
+    <div class="disc-card"><h3>S — Stabilité</h3><p>Orienté(e) soutien, patience et harmonie. Rythme posé, centré(e) sur les personnes.</p></div>
+    <div class="disc-card"><h3>C — Conformité</h3><p>Orienté(e) qualité, rigueur et analyse. Rythme posé, centré(e) sur les tâches.</p></div>
+  </div>
+
+  <div class="info-box">
+    <strong>Consigne :</strong> Pour chacune des 20 questions, choisissez <strong>instinctivement</strong> l'affirmation qui vous ressemble le plus. Il n'y a ni bonne ni mauvaise réponse — chaque style apporte des forces spécifiques. Répondez spontanément, sans trop réfléchir. Durée estimée : 10 minutes.
+  </div>
+
+  <button class="btn-start" onclick="startTest()">Commencer le diagnostic →</button>
+</div>
+</div>
+
+<!-- ══════════════════════════════════
+     ÉCRAN 2 — QUESTIONNAIRE
+══════════════════════════════════ -->
+<div id="screen-quiz" class="screen">
+  <div class="progress-wrap">
+    <div class="progress-top">
+      <span class="progress-label">Progression</span>
+      <span class="progress-count" id="progress-count">1 / 20</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar" id="progress-bar" style="width:5%"></div></div>
+  </div>
+  <div class="q-wrap">
+    <div class="q-card" id="q-card">
+      <div class="q-num" id="q-num">Question 1</div>
+      <div class="q-text" id="q-text"></div>
+      <p class="q-instr">Choisissez l'affirmation qui vous ressemble le plus :</p>
+      <div class="choices" id="choices"></div>
+      <div class="nav-row">
+        <button class="btn-prev" id="btn-prev" onclick="prevQ()">← Précédent</button>
+        <button class="btn-next" id="btn-next" onclick="nextQ()">Suivant →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     ÉCRAN 3 — RÉSULTATS
+══════════════════════════════════ -->
+<div id="screen-result" class="screen">
+<div class="res-wrap">
+
+  <div class="res-header">
+    <p class="res-subtitle">Votre profil comportemental DISC</p>
+    <h2 id="res-title">—</h2>
+    <div class="profile-badge" id="res-badge"></div>
+    <p class="res-archetype" id="res-archetype"></p>
+  </div>
+
+  <!-- Axes du modèle -->
+  <div class="axes-row">
+    <div class="axe-card">
+      <h4>Axe Rythme</h4>
+      <div class="axe-item"><div class="axe-dot" style="background:var(--D)"></div><span><strong>D & I</strong> — Rythme rapide (extraversion, action directe)</span></div>
+      <div class="axe-item"><div class="axe-dot" style="background:var(--C)"></div><span><strong>S & C</strong> — Rythme posé (introversion, réflexion avant action)</span></div>
+    </div>
+    <div class="axe-card">
+      <h4>Axe Priorité</h4>
+      <div class="axe-item"><div class="axe-dot" style="background:var(--D)"></div><span><strong>D & C</strong> — Orientés tâche / résultats / objectifs</span></div>
+      <div class="axe-item"><div class="axe-dot" style="background:var(--S)"></div><span><strong>I & S</strong> — Orientés relation / personnes / collectif</span></div>
+    </div>
+  </div>
+
+  <!-- Scores -->
+  <div class="scores-section">
+    <h3>Vos scores par dimension</h3>
+    <div class="score-row">
+      <div class="score-lbl D">D</div><div class="score-name">Dominance</div>
+      <div class="score-bar-bg"><div class="score-bar D" id="bar-D"></div></div>
+      <div class="score-num" id="num-D">0 <span class="score-pct" id="pct-D"></span></div>
+    </div>
+    <div class="score-row">
+      <div class="score-lbl I">I</div><div class="score-name">Influence</div>
+      <div class="score-bar-bg"><div class="score-bar I" id="bar-I"></div></div>
+      <div class="score-num" id="num-I">0 <span class="score-pct" id="pct-I"></span></div>
+    </div>
+    <div class="score-row">
+      <div class="score-lbl S">S</div><div class="score-name">Stabilité</div>
+      <div class="score-bar-bg"><div class="score-bar S" id="bar-S"></div></div>
+      <div class="score-num" id="num-S">0 <span class="score-pct" id="pct-S"></span></div>
+    </div>
+    <div class="score-row">
+      <div class="score-lbl C">C</div><div class="score-name">Conformité</div>
+      <div class="score-bar-bg"><div class="score-bar C" id="bar-C"></div></div>
+      <div class="score-num" id="num-C">0 <span class="score-pct" id="pct-C"></span></div>
+    </div>
+  </div>
+
+  <!-- Description profil combiné -->
+  <div class="style-section">
+    <h3 id="style-title">Description de votre profil</h3>
+    <p class="style-desc" id="style-desc"></p>
+    <div class="style-tags" id="style-tags"></div>
+  </div>
+
+  <!-- 4 cartes -->
+  <div class="cards-grid">
+    <div class="info-card"><h4 class="f">✅ Vos forces</h4><ul id="forces-list"></ul></div>
+    <div class="info-card"><h4 class="v">⚡ Points de vigilance</h4><ul id="vigil-list"></ul></div>
+    <div class="info-card"><h4 class="m">🎯 Ce qui vous motive</h4><ul id="motiv-list"></ul></div>
+    <div class="info-card"><h4 class="c">💬 Communiquer avec vous</h4><ul id="comm-list"></ul></div>
+  </div>
+
+  <!-- Tensions -->
+  <div class="tensions-section">
+    <h3>Dynamiques relationnelles — tensions & complémentarités</h3>
+    <div class="tension-grid" id="tension-grid"></div>
+  </div>
+
+  <!-- Règle de Platine -->
+  <div class="platine">
+    <h4>La Règle de Platine®</h4>
+    <p id="platine-text"></p>
+  </div>
+
+  <!-- Encadré pédagogique -->
+  <div class="pedagogique">
+    <h3>📋 Cadre d'utilisation de ce diagnostic</h3>
+    <ul>
+      <li>Ce diagnostic est une <strong>initiation pédagogique</strong> au modèle DISC, conçu à des fins d'apprentissage (MSM2 — Leadership & Coaching, FormaSo).</li>
+      <li>Le DISC mesure des <strong>comportements observables</strong>, pas des traits de personnalité fixes ou immuables.</li>
+      <li><strong>Aucun profil n'est supérieur à un autre</strong> : chaque style apporte des forces spécifiques selon le contexte.</li>
+      <li>Vos résultats peuvent <strong>évoluer selon les contextes</strong> et les périodes de vie (style naturel vs style adapté).</li>
+      <li>Ce test de 20 questions est une approche introductive. Les outils certifiés Assessments 24x7 (algorithmes validés par l'ASI selon normes APA) offrent une analyse complète incluant style naturel, style adapté et Forces Motrices.</li>
+      <li>Ces résultats sont un <strong>point de départ</strong> pour votre développement professionnel — pas une étiquette définitive.</li>
+    </ul>
+  </div>
+
+  <div class="cta-row">
+    <button class="btn-print" onclick="window.print()">🖨 Imprimer</button>
+    <button class="btn-restart" onclick="restartTest()">↺ Refaire le test</button>
+  </div>
+</div>
+</div>
+
+<footer>FormaSo © 2026 · NDA 756 405 68 964 · RS7138 · Qualiopi · Support pédagogique MSM2 — Leadership & Coaching · Modèle DISC issu des travaux de W.M. Marston (1928)</footer>
+
+<script>
+// ═══════════════════════════════════════
+// 20 QUESTIONS — choix neutres (aucun indice visuel DISC)
+// disc : lettre interne pour le scoring uniquement
+// ═══════════════════════════════════════
+const questions = [
+  { text:"Dans un projet de groupe, j'ai naturellement tendance à…", choices:[
+    {disc:"D",text:"Prendre les décisions et impulser le rythme"},
+    {disc:"I",text:"Motiver l'équipe et créer une bonne ambiance"},
+    {disc:"S",text:"Soutenir les autres et veiller à la cohésion"},
+    {disc:"C",text:"Organiser méticuleusement et vérifier la qualité"}]},
+  { text:"Face à un problème inattendu au travail, ma première réaction est de…", choices:[
+    {disc:"D",text:"Agir immédiatement pour trouver une solution"},
+    {disc:"I",text:"En parler avec mes collègues pour brainstormer"},
+    {disc:"S",text:"Analyser calmement la situation avant d'agir"},
+    {disc:"C",text:"Collecter toutes les informations nécessaires"}]},
+  { text:"Mes collègues me décrivent le plus souvent comme…", choices:[
+    {disc:"D",text:"Direct(e), déterminé(e), orienté(e) résultats"},
+    {disc:"I",text:"Enthousiaste, communicatif(ve), optimiste"},
+    {disc:"S",text:"Patient(e), fiable et à l'écoute"},
+    {disc:"C",text:"Rigoureux(se), précis(e) et analytique"}]},
+  { text:"Lorsque je prends une décision importante, je préfère…", choices:[
+    {disc:"D",text:"Décider rapidement sur la base des faits essentiels"},
+    {disc:"I",text:"Consulter plusieurs personnes et sentir l'adhésion"},
+    {disc:"S",text:"Prendre mon temps et peser tous les aspects"},
+    {disc:"C",text:"Analyser en profondeur toutes les données disponibles"}]},
+  { text:"Ce qui me motive le plus dans mon travail, c'est…", choices:[
+    {disc:"D",text:"Relever des défis et obtenir des résultats concrets"},
+    {disc:"I",text:"Travailler avec des gens et créer du lien"},
+    {disc:"S",text:"Contribuer à un environnement stable et harmonieux"},
+    {disc:"C",text:"Produire un travail de haute qualité, sans erreur"}]},
+  { text:"En situation de stress ou de pression, j'ai tendance à…", choices:[
+    {disc:"D",text:"Devenir plus directif(ve) et exigeant(e)"},
+    {disc:"I",text:"Chercher du soutien auprès de mon entourage"},
+    {disc:"S",text:"Me replier et attendre que la situation se calme"},
+    {disc:"C",text:"Vérifier et re-vérifier pour ne rien laisser au hasard"}]},
+  { text:"Ma façon préférée de communiquer dans une réunion est…", choices:[
+    {disc:"D",text:"Aller droit au but et présenter les conclusions"},
+    {disc:"I",text:"Partager des idées, animer, créer de l'énergie"},
+    {disc:"S",text:"Écouter attentivement avant de prendre la parole"},
+    {disc:"C",text:"Présenter des arguments structurés et documentés"}]},
+  { text:"Face au changement, mon attitude naturelle est de…", choices:[
+    {disc:"D",text:"L'initier et le piloter activement"},
+    {disc:"I",text:"L'accueillir avec enthousiasme si l'idée est séduisante"},
+    {disc:"S",text:"Prendre du temps pour m'y adapter progressivement"},
+    {disc:"C",text:"Évaluer ses risques et ses bénéfices avant d'adhérer"}]},
+  { text:"Ce que j'apprécie le moins dans le travail d'équipe, c'est…", choices:[
+    {disc:"D",text:"Le manque d'efficacité et les lenteurs décisionnelles"},
+    {disc:"I",text:"L'atmosphère froide ou les conflits non résolus"},
+    {disc:"S",text:"Les changements brusques de direction ou de méthode"},
+    {disc:"C",text:"Le manque de rigueur ou les erreurs non corrigées"}]},
+  { text:"Lorsqu'on me confie un projet, je commence par…", choices:[
+    {disc:"D",text:"Définir l'objectif final et m'y mettre directement"},
+    {disc:"I",text:"Partager ma vision et embarquer l'équipe"},
+    {disc:"S",text:"Clarifier les rôles et établir un plan stable"},
+    {disc:"C",text:"Analyser les contraintes et organiser méthodiquement"}]},
+  { text:"Mon rapport au temps dans un projet est…", choices:[
+    {disc:"D",text:"Je fixe des délais serrés et pousse pour les tenir"},
+    {disc:"I",text:"Je travaille par élan, en m'adaptant en cours de route"},
+    {disc:"S",text:"Je planifie à un rythme régulier, étape par étape"},
+    {disc:"C",text:"Je prends le temps nécessaire pour bien faire les choses"}]},
+  { text:"Dans une négociation ou un désaccord, je…", choices:[
+    {disc:"D",text:"Défends fermement ma position et cherche à convaincre"},
+    {disc:"I",text:"Cherche un compromis acceptable pour tous"},
+    {disc:"S",text:"Évite le conflit et préfère la conciliation"},
+    {disc:"C",text:"M'appuie sur des faits et des arguments logiques"}]},
+  { text:"Ce que les autres remarquent le plus souvent chez moi, c'est…", choices:[
+    {disc:"D",text:"Ma capacité à prendre des initiatives et à décider"},
+    {disc:"I",text:"Mon enthousiasme et ma facilité à créer du lien"},
+    {disc:"S",text:"Ma constance, ma fiabilité et mon calme"},
+    {disc:"C",text:"Ma rigueur, mon souci du détail et ma précision"}]},
+  { text:"L'environnement de travail dans lequel je suis le plus efficace est…", choices:[
+    {disc:"D",text:"Stimulant, autonome, avec des objectifs ambitieux"},
+    {disc:"I",text:"Convivial, collaboratif et créatif"},
+    {disc:"S",text:"Stable, structuré et prévisible"},
+    {disc:"C",text:"Organisé, avec des procédures claires et du temps pour bien faire"}]},
+  { text:"Lorsque je dois déléguer une tâche, je…", choices:[
+    {disc:"D",text:"Indique l'objectif final et laisse faire sans interférer"},
+    {disc:"I",text:"Explique ma vision et insuffle de l'enthousiasme"},
+    {disc:"S",text:"Donne des instructions claires étape par étape"},
+    {disc:"C",text:"Fournis des critères précis et vérifie régulièrement"}]},
+  { text:"Face à un(e) collaborateur(trice) en difficulté, je…", choices:[
+    {disc:"D",text:"Propose une solution concrète et un plan d'action rapide"},
+    {disc:"I",text:"L'encourage, valorise ses points forts et remonte le moral"},
+    {disc:"S",text:"Prends le temps d'écouter et de le/la soutenir sincèrement"},
+    {disc:"C",text:"Analyse la situation pour identifier la cause racine"}]},
+  { text:"Pour préparer une prise de parole importante, je…", choices:[
+    {disc:"D",text:"Note les points clés et vais à l'essentiel"},
+    {disc:"I",text:"Construis un discours percutant et humain"},
+    {disc:"S",text:"Prépare soigneusement chaque étape à l'avance"},
+    {disc:"C",text:"Vérifie tous les faits et prépare des réponses aux objections"}]},
+  { text:"Ce qui décrit le mieux ma posture en management est…", choices:[
+    {disc:"D",text:"Je fixe des objectifs élevés et tiens les gens responsables"},
+    {disc:"I",text:"Je fédère, j'inspire et crée un collectif engagé"},
+    {disc:"S",text:"J'accompagne, soutiens et crée un cadre sécurisant"},
+    {disc:"C",text:"Je structure, contrôle la qualité et valorise la rigueur"}]},
+  { text:"Ma plus grande crainte dans un contexte professionnel est de…", choices:[
+    {disc:"D",text:"Perdre le contrôle ou être contourné(e) dans mes décisions"},
+    {disc:"I",text:"Être rejeté(e) ou mal perçu(e) par l'équipe"},
+    {disc:"S",text:"Faire face à une instabilité brutale et imprévue"},
+    {disc:"C",text:"Être critiqué(e) pour un travail imprécis ou de mauvaise qualité"}]},
+  { text:"Si je devais choisir mon rôle idéal dans une équipe projet, ce serait…", choices:[
+    {disc:"D",text:"Chef de projet : piloter, décider, avancer vite"},
+    {disc:"I",text:"Ambassadeur(trice) : communiquer, convaincre, animer"},
+    {disc:"S",text:"Coordinateur(trice) : assurer le suivi, stabiliser, soutenir"},
+    {disc:"C",text:"Expert(e) qualité : analyser, structurer, garantir la rigueur"}]}
+];
+
+// ═══════════════════════════════════════
+// BASE DE DONNÉES PROFILS
+// ═══════════════════════════════════════
+const PROFILS = {
+  D:{
+    archetype:"Le/La Directeur(trice)",
+    desc:"Vous êtes orienté(e) action, résultats et décision rapide. Vous percevez l'environnement comme un terrain à conquérir et y agissez directement. Direct(e) et affirmé(e), vous aimez diriger, relever des défis et obtenir des résultats concrets sans attendre. Votre énergie et votre détermination sont un moteur puissant.",
+    tags:["Action","Résultats","Décision","Défi","Leadership","Autonomie"],
+    forces:["Prise de décision rapide et efficace","Leadership d'action naturel","Capacité à impulser le changement","Audace et esprit d'initiative","Résistance à la pression"],
+    vigilance:["Peut paraître autoritaire ou trop direct(e)","Impatience face aux lenteurs et aux indécisions","Tendance à sous-estimer la dimension relationnelle","Peut négliger les détails importants"],
+    motivations:["Relever des défis stimulants","Avoir de l'autonomie et du pouvoir de décision","Obtenir des résultats tangibles et rapides"],
+    comm:["Soyez direct(e) et allez à l'essentiel","Axez sur les résultats, pas les procédures","Donnez-lui de l'autonomie dans ses missions","Évitez les détails superflus et les longues explications"],
+    platine:"Traitez-moi comme je veux être traité(e) : donnez-moi des défis, de l'autonomie et allez droit au but avec moi.",
+    tensions:{
+      alert:[
+        {t:"Tension D / S — Double tension",txt:"Le rythme rapide et l'orientation tâche du D peuvent heurter la patience et l'orientation relation du S. Ce sont les deux styles diamétralement opposés dans le modèle."},
+        {t:"Tension D / C — Urgence vs Analyse",txt:"Le D veut décider et agir sans attendre. Le C a besoin d'analyser toutes les données avant d'agir. Cette différence de tempo génère souvent des frictions."}
+      ],
+      ok:[
+        {t:"Complémentarité D / I",txt:"D et I partagent un rythme rapide et une posture proactive. Excellent tandem sur les projets dynamiques, même si leurs priorités (tâche vs relation) diffèrent."}
+      ]
+    }
+  },
+  I:{
+    archetype:"Le/La Communicant(e)",
+    desc:"Enthousiaste et extraverti(e), vous êtes profondément orienté(e) vers les personnes et la relation. Vous percevez l'environnement comme favorable et y agissez par la persuasion et l'énergie positive. Vous excellez à créer du lien, à inspirer et à fédérer autour d'une vision commune. Votre optimisme est communicatif.",
+    tags:["Enthousiasme","Relation","Créativité","Persuasion","Optimisme","Inspiration"],
+    forces:["Aisance relationnelle et communication naturelle","Capacité à motiver et inspirer","Créativité et pensée innovante","Optimisme et énergie contagieuse","Facilité à créer et élargir un réseau"],
+    vigilance:["Peut manquer de rigueur dans les suivis et livrables","Tendance à l'impulsivité dans les décisions","Peut promettre plus que ce qui est livrable","La peur du rejet peut nuire à l'assertivité"],
+    motivations:["Travailler dans un environnement social et stimulant","Être reconnu(e) et apprécié(e) par l'équipe","Avoir de la variété et des projets créatifs"],
+    comm:["Accordez du temps à l'échange informel","Valorisez ses idées et son enthousiasme","Soyez ouvert(e), positif(ve) et chaleureux(se)","Évitez la froideur ou l'excès de formalisme"],
+    platine:"Traitez-moi comme je veux être traité(e) : valorisez mes idées, montrez de l'enthousiasme et créez une relation de confiance avec moi.",
+    tensions:{
+      alert:[
+        {t:"Tension I / C — Double tension",txt:"L'enthousiasme rapide du I s'oppose au besoin de rigueur et d'analyse du C. Ces deux styles sont diamétralement opposés dans le modèle (rythme ET priorité)."},
+        {t:"Tension I / S — Urgence vs Patience",txt:"Le rythme vif et l'énergie du I peuvent bousculer la patience naturelle du S, même si tous deux sont orientés relation."}
+      ],
+      ok:[
+        {t:"Complémentarité I / D",txt:"I et D partagent un rythme rapide et une posture proactive. Excellent duo sur les projets à haute énergie, malgré une différence de priorité tâche/relation."}
+      ]
+    }
+  },
+  S:{
+    archetype:"Le/La Soutien(ne)",
+    desc:"Patient(e) et loyal(e), vous êtes profondément orienté(e) vers le collectif et l'harmonie. Vous composez avec l'environnement plutôt que d'y agir frontalement. Votre écoute sincère, votre constance et votre fiabilité créent des environnements sécurisants et durables. Vous êtes souvent le socle invisible sur lequel repose l'équipe.",
+    tags:["Patience","Écoute","Fiabilité","Harmonie","Soutien","Loyauté"],
+    forces:["Écoute active et empathie naturelle","Fiabilité et constance dans l'effort","Capacité à préserver la cohésion d'équipe","Calme et stabilité sous pression","Loyauté et esprit d'équipe profond"],
+    vigilance:["Peut avoir du mal à s'affirmer ou à dire non","Résistance au changement brusque ou non anticipé","Peut accumuler les frustrations sans les exprimer","Tendance à prendre trop de responsabilités"],
+    motivations:["Travailler dans un environnement stable et prévisible","Contribuer au succès et à la cohésion collective","Avoir des rôles clairement définis et des procédures stables"],
+    comm:["Soyez patient(e) et évitez les brusqueries","Donnez du temps d'adaptation aux changements","Montrez votre reconnaissance de façon sincère et régulière","Soyez cohérent(e) dans vos engagements et vos décisions"],
+    platine:"Traitez-moi comme je veux être traité(e) : donnez-moi de la stabilité, de la reconnaissance sincère et impliquez-moi avec bienveillance.",
+    tensions:{
+      alert:[
+        {t:"Tension S / D — Double tension",txt:"La patience et l'orientation relation du S s'opposent directement à l'urgence et à l'orientation tâche du D. Ce sont les deux profils diamétralement opposés."},
+        {t:"Tension S / I — Patience vs Urgence",txt:"La patience naturelle du S peut entrer en conflit avec le rythme vif et la spontanéité du I, même si tous deux sont orientés relation."}
+      ],
+      ok:[
+        {t:"Complémentarité S / C",txt:"S et C partagent un rythme posé et réfléchi. Excellent duo de fond sur les projets nécessitant méthode, fiabilité et qualité dans la durée."}
+      ]
+    }
+  },
+  C:{
+    archetype:"Le/La Analyste",
+    desc:"Précis(e) et analytique, vous êtes orienté(e) vers la qualité et la rigueur. Vous percevez l'environnement comme exigeant et y répondez par la méthode, l'analyse approfondie et le respect des standards. Votre capacité à voir les détails, à anticiper les risques et à produire un travail irréprochable est une force rare et précieuse.",
+    tags:["Rigueur","Précision","Qualité","Analyse","Méthode","Expertise"],
+    forces:["Rigueur et précision dans l'analyse","Qualité constante et maîtrisée du travail produit","Capacité à anticiper les risques et les écueils","Approche méthodique et structurée","Expertise technique solide et fiable"],
+    vigilance:["Peut être perçu(e) comme trop perfectionniste","Tendance à la sur-analyse pouvant freiner la décision","Peut se montrer distant(e) ou peu expressif(ve)","Peut avoir du mal à accepter l'imperfection des autres"],
+    motivations:["Produire un travail de haute qualité et sans erreur","Avoir des procédures claires et des standards élevés","Être reconnu(e) pour son expertise et sa rigueur"],
+    comm:["Soyez précis(e), factuel(le) et documenté(e)","Donnez-lui le temps d'analyser avant de décider","Fournissez des données et des preuves solides","Évitez les décisions trop rapides ou mal étayées"],
+    platine:"Traitez-moi comme je veux être traité(e) : donnez-moi les faits, respectez ma méthode et laissez-moi le temps d'analyser correctement.",
+    tensions:{
+      alert:[
+        {t:"Tension C / I — Double tension",txt:"Le besoin de rigueur et de lenteur analytique du C s'oppose directement à la spontanéité et au rythme rapide du I. Ce sont les deux profils diamétralement opposés."},
+        {t:"Tension C / D — Analyse vs Urgence",txt:"La prudence analytique du C peut ralentir l'urgence de décision du D. Le D perçoit le C comme trop lent ; le C perçoit le D comme trop impulsif."}
+      ],
+      ok:[
+        {t:"Complémentarité C / S",txt:"C et S partagent un rythme posé et une orientation vers la qualité. Duo de précision et de fiabilité, idéal pour les projets nécessitant rigueur et constance."}
+      ]
+    }
+  }
+};
+
+// Descriptions profils combinés
+const COMBOS = {
+  DI:"Vous combinez l'énergie d'action du D et l'enthousiasme relationnel du I. Rapide, affirmé(e) et communicant(e), vous savez embarquer les équipes tout en avançant vite. Votre rythme est soutenu et vous êtes à l'aise pour décider comme pour convaincre.",
+  DS:"Vous associez la détermination du D à la patience et au soutien du S — une combinaison rare. Vous pouvez à la fois impulser et stabiliser. Vous tendez à prendre les commandes sous pression (D), mais votre fond naturel reste ancré dans le collectif (S).",
+  DC:"Vous combinez l'efficacité orientée résultats du D et la rigueur analytique du C. Vous cherchez à la fois l'action rapide et l'excellence dans l'exécution. Exigeant(e) envers vous-même et les autres, vous visez performance et qualité simultanément.",
+  ID:"Vous combinez l'enthousiasme du I et la détermination du D. Inspirant(e) et efficace, vous savez fédérer les équipes et obtenir des résultats. Votre rythme est rapide et votre énergie communicative.",
+  IS:"Vous associez l'enthousiasme du I et la patience du S. Profondément orienté(e) vers les autres, vous êtes à la fois inspirant(e) et bienveillant(e). Vous créez des liens durables et savez aussi bien motiver que soutenir.",
+  IC:"Vous combinez l'ouverture relationnelle du I et la rigueur du C. Vous savez communiquer avec enthousiasme tout en vous appuyant sur des faits solides. Cette combinaison peut générer une tension interne entre spontanéité et besoin de perfection.",
+  SD:"Vous associez la stabilité du S et la détermination du D. Vous êtes capable d'impulser quand il le faut, tout en maintenant un environnement harmonieux. Votre profil adaptatif est un atout précieux en management.",
+  SI:"Vous associez la patience du S et l'enthousiasme du I. Très orienté(e) vers les autres, vous créez des environnements chaleureux et fédérateurs. Votre écoute et votre positivité sont des atouts relationnels forts.",
+  SC:"Vous associez la stabilité du S et la conformité du C. Fiable, méthodique et patient(e), vous produisez un travail de qualité dans la durée. Vous avez besoin d'un environnement structuré, prévisible et sans conflit pour donner le meilleur de vous-même.",
+  CD:"Vous associez la rigueur du C et la détermination du D. Analytique et efficace, vous cherchez à bien faire ET à aller vite. L'exigence est au cœur de votre mode de fonctionnement.",
+  CI:"Vous associez la rigueur du C et l'enthousiasme du I. Vous pouvez être à la fois structuré(e) et chaleureux(se), même si ces deux dimensions peuvent parfois créer une tension interne.",
+  CS:"Vous associez la conformité du C et la stabilité du S. Méthodique, fiable et soucieux(se) de la qualité, vous travaillez dans la durée avec constance. Vous avez besoin de stabilité, de procédures claires et d'un environnement sans conflit."
+};
+
+// ═══════════════════════════════════════
+// ÉTAT & LOGIQUE
+// ═══════════════════════════════════════
+let currentQ = 0;
+let answers = new Array(20).fill(null);
+let shuffledChoices = [];
+
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5); }
+
+function startTest(){
+  document.getElementById('screen-intro').classList.remove('active');
+  document.getElementById('screen-quiz').classList.add('active');
+  renderQ();
+}
+
+function renderQ(){
+  const q = questions[currentQ];
+  // Nouveau shuffle uniquement si on arrive sur cette question pour la première fois
+  if(!shuffledChoices[currentQ]){
+    shuffledChoices[currentQ] = shuffle(q.choices);
+  }
+  document.getElementById('q-num').textContent = `Question ${currentQ+1} sur 20`;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('progress-count').textContent = `${currentQ+1} / 20`;
+  document.getElementById('progress-bar').style.width = `${((currentQ+1)/20)*100}%`;
+  document.getElementById('btn-prev').style.opacity = currentQ===0?'0.3':'1';
+  document.getElementById('btn-prev').style.pointerEvents = currentQ===0?'none':'all';
+
+  const container = document.getElementById('choices');
+  container.innerHTML='';
+  shuffledChoices[currentQ].forEach(choice=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn' + (answers[currentQ]===choice.disc?' selected':'');
+    btn.textContent = choice.text;
+    btn.onclick = ()=>selectAnswer(choice.disc, container, btn);
+    container.appendChild(btn);
+  });
+
+  const nx = document.getElementById('btn-next');
+  const isLast = currentQ===19;
+  nx.textContent = isLast ? 'Voir mes résultats →' : 'Suivant →';
+  nx.classList.toggle('ready', answers[currentQ]!==null);
+
+  const card = document.getElementById('q-card');
+  card.style.animation='none';
+  setTimeout(()=>{card.style.animation='slideIn .3s ease';},10);
+}
+
+function selectAnswer(disc, container, btn){
+  answers[currentQ]=disc;
+  container.querySelectorAll('.choice-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('btn-next').classList.add('ready');
+  if(currentQ===19) document.getElementById('btn-next').textContent='Voir mes résultats →';
+}
+
+function nextQ(){
+  if(answers[currentQ]===null) return;
+  if(currentQ<19){ currentQ++; renderQ(); }
+  else showResults();
+}
+function prevQ(){
+  if(currentQ>0){ currentQ--; renderQ(); }
+}
+
+function showResults(){
+  const scores={D:0,I:0,S:0,C:0};
+  answers.forEach(a=>{ if(a) scores[a]++; });
+  const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  const dom = sorted[0][0];
+  const sec = sorted[1][0];
+  const p = PROFILS[dom];
+
+  document.getElementById('screen-quiz').classList.remove('active');
+  document.getElementById('screen-result').classList.add('active');
+  window.scrollTo(0,0);
+
+  // Badge profil combiné
+  const comboKey = dom+sec;
+  document.getElementById('res-title').textContent = `Style ${dom}${sec} — ${p.archetype}`;
+  const badge = document.getElementById('res-badge');
+  badge.innerHTML='';
+  sorted.forEach(([d])=>{
+    const sp=document.createElement('span');
+    sp.textContent=d;
+    sp.style.color=`var(--${d})`;
+    badge.appendChild(sp);
+  });
+  document.getElementById('res-archetype').textContent = p.archetype;
+
+  // Barres animées
+  setTimeout(()=>{
+    ['D','I','S','C'].forEach(d=>{
+      const pct = Math.round((scores[d]/20)*100);
+      document.getElementById('bar-'+d).style.width=pct+'%';
+      document.getElementById('num-'+d).innerHTML=`${scores[d]}/20 <span class="score-pct">(${pct}%)</span>`;
+    });
+  },200);
+
+  // Description : combinée si dispo, sinon dominant seul
+  const styleDesc = COMBOS[comboKey] || p.desc;
+  document.getElementById('style-title').textContent = `Votre profil : Style ${dom}${sec}`;
+  document.getElementById('style-desc').textContent = styleDesc;
+  const tags = document.getElementById('style-tags');
+  tags.innerHTML = p.tags.map(t=>`<span class="style-tag">${t}</span>`).join('');
+
+  // 4 cartes
+  document.getElementById('forces-list').innerHTML = p.forces.map(f=>`<li>${f}</li>`).join('');
+  document.getElementById('vigil-list').innerHTML = p.vigilance.map(v=>`<li>${v}</li>`).join('');
+  document.getElementById('motiv-list').innerHTML = p.motivations.map(m=>`<li>${m}</li>`).join('');
+  document.getElementById('comm-list').innerHTML = p.comm.map(c=>`<li>${c}</li>`).join('');
+
+  // Tensions ciblées
+  const tGrid = document.getElementById('tension-grid');
+  tGrid.innerHTML='';
+  p.tensions.alert.forEach(t=>{
+    tGrid.innerHTML+=`<div class="t-card alert"><div class="t-title">⚠️ ${t.t}</div>${t.txt}</div>`;
+  });
+  p.tensions.ok.forEach(t=>{
+    tGrid.innerHTML+=`<div class="t-card ok"><div class="t-title">✅ ${t.t}</div>${t.txt}</div>`;
+  });
+
+  // Règle de Platine
+  document.getElementById('platine-text').textContent = p.platine;
+}
+
+function restartTest(){
+  currentQ=0;
+  answers=new Array(20).fill(null);
+  shuffledChoices=[];
+  document.getElementById('screen-result').classList.remove('active');
+  document.getElementById('screen-intro').classList.add('active');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
